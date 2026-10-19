@@ -1,0 +1,2 @@
+# SRVcheckpartita
+Check partita 
