@@ -1,0 +1,326 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<title>SRV Prossima Partita</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Monoton&family=Rubik:wght@400;500;700;900&display=swap">
+<style id="css">
+/* Layout: una colonna stretta da telefono; fascia bandiera in testa, scheda partita verde, poi blocchi per categoria come le righe del foglio */
+:root{
+  --maroon:#801419; --maroon-dk:#5e0e12; --gold:#FDDA68; --gold-soft:#fff6d6;
+  --green:#004D1E; --green-dk:#00381a; --ink:#1f1a17; --muted:#6b625a;
+  --paper:#ffffff; --line:#eadfc3; --slate:#343434;
+  --display:"Monoton","Rubik",system-ui,sans-serif;
+  --body:"Rubik",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}
+.wrap{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+button,input,select{font:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* testata con le strisce del sito */
+.brand{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px;position:relative}
+.badge{width:58px;height:58px;border-radius:50%;background:var(--gold);border:3px solid var(--slate);display:grid;place-items:center;
+  font-weight:900;color:var(--slate);letter-spacing:-.04em;font-size:19px;position:relative;z-index:1}
+.badge::before{content:"★";position:absolute;top:-17px;color:var(--maroon);font-size:14px}
+.stripes{display:flex;flex-direction:column;gap:7px;margin-left:-26px}
+.stripes i{display:block;height:13px;border-radius:7px;background:var(--green)}
+.stripes i+i{background:var(--maroon)}
+.brand-name{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.brand-name b{font-family:var(--display);font-weight:400;color:var(--maroon);font-size:clamp(20px,6vw,28px);letter-spacing:.02em}
+.brand-name span{font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.08em;font-size:13px}
+
+/* scheda partita */
+.match{background:var(--green);color:var(--gold);border-radius:10px;overflow:hidden;border:3px solid var(--green-dk)}
+.match-top{padding:16px 18px 14px;display:flex;flex-direction:column;gap:8px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:3px 9px;border-radius:999px;background:var(--gold);color:var(--green)}
+.chip.away{background:var(--maroon);color:var(--gold)}
+.match h1{margin:0;font-weight:900;font-size:clamp(28px,8.5vw,42px);line-height:1.05;text-transform:uppercase;text-wrap:balance;letter-spacing:-.01em}
+.match .when{font-size:18px;font-weight:500;color:#fff;text-transform:capitalize}
+.times{display:grid;grid-template-columns:1fr 1fr;border-top:3px solid var(--green-dk)}
+.time{padding:12px 18px;display:flex;flex-direction:column;gap:2px}
+.time+.time{border-left:3px solid var(--green-dk)}
+.time.key{background:var(--gold);color:var(--maroon)}
+.time small{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;opacity:.85}
+.time strong{font-size:34px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+.facts{background:var(--paper);color:var(--ink);display:flex;flex-direction:column}
+.fact{display:grid;grid-template-columns:92px 1fr;gap:10px;padding:11px 18px;border-top:1px solid var(--line);align-items:baseline}
+.fact:first-child{border-top:0}
+.lbl{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.val{font-weight:500;min-width:0;overflow-wrap:anywhere}
+.val a{color:var(--maroon);font-weight:700;font-size:14px;white-space:nowrap}
+
+/* blocchi */
+.block{border:2px solid var(--line);border-radius:10px;overflow:hidden}
+.block h2{margin:0;background:var(--maroon);color:var(--gold);font-size:15px;font-weight:900;text-transform:uppercase;letter-spacing:.1em;padding:9px 16px}
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:4px 14px;padding:11px 16px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .k{color:var(--muted);font-size:14px}
+.row .v{font-weight:700;overflow-wrap:anywhere}
+.row .v.tbd{font-weight:400;font-style:italic;color:var(--muted)}
+.row .n{grid-column:2;font-size:13.5px;color:var(--muted);overflow-wrap:anywhere}
+.cars{padding:6px 16px 12px}
+.car{display:grid;grid-template-columns:1fr auto;gap:2px 10px;padding:9px 0;border-top:1px solid var(--line)}
+.car:first-child{border-top:0}
+.car b{font-weight:700}
+.car .seats{font-weight:900;color:var(--green);font-variant-numeric:tabular-nums}
+.car .sub{grid-column:1/-1;font-size:13.5px;color:var(--muted)}
+.none{padding:12px 16px;color:var(--muted);font-style:italic}
+
+/* azioni */
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.btn{appearance:none;border:2px solid var(--maroon);background:var(--maroon);color:var(--gold);font-weight:700;padding:11px 16px;border-radius:8px;
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;font-size:15px;line-height:1.1}
+.btn:hover{background:var(--maroon-dk)}
+.btn.green{background:var(--green);border-color:var(--green)}
+.btn.green:hover{background:var(--green-dk)}
+.btn.ghost{background:transparent;color:var(--maroon)}
+.btn.ghost:hover{background:var(--gold-soft)}
+.btn.small{padding:7px 11px;font-size:13.5px}
+.status{font-size:14px;color:var(--green);font-weight:500;min-height:1.2em}
+.status.err{color:var(--maroon)}
+.copybox{width:100%;min-height:180px;font-family:ui-monospace,Menlo,monospace;font-size:13px;padding:10px;border:2px solid var(--line);border-radius:8px}
+footer{font-size:12.5px;color:var(--muted);text-align:center}
+
+/* modifica */
+.editor{display:flex;flex-direction:column;gap:16px}
+.ed-block{border:2px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.ed-block h3{margin:0;font-size:14px;text-transform:uppercase;letter-spacing:.1em;color:var(--maroon);font-weight:900}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:3px;min-width:0}
+.field label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.field input,.field select{border:2px solid var(--line);border-radius:7px;padding:8px 10px;background:#fff;color:var(--ink);width:100%;min-width:0}
+.field input:focus,.field select:focus{border-color:var(--green);outline:none}
+.ed-row{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:8px;align-items:end}
+.ed-car{display:grid;grid-template-columns:1.2fr .6fr .8fr .8fr auto;gap:8px;align-items:end}
+.x{appearance:none;border:0;background:none;color:var(--maroon);font-size:22px;cursor:pointer;padding:6px 4px;line-height:1}
+.sticky{position:sticky;bottom:0;background:var(--paper);padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));border-top:2px solid var(--line);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+@media (max-width:520px){
+  .ed-row{grid-template-columns:1fr 1fr}
+  .ed-row .field:first-child{grid-column:1/-1}
+  .ed-car{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}
+  .row .n{grid-column:1}
+  .time strong{font-size:28px}
+}
+@media (prefers-reduced-motion:no-preference){.btn{transition:background .15s}}
+</style>
+<div id="app"></div>
+<script type="application/json" id="state">{"partita":{"titolo":"Salsedine – SRV","giornata":"G2","data":"2026-10-19","dove":"CEP Campalto Villaggio Laguna","maglia":"Nera con calze verdi","casa":"fuori","campo":"20:00","inizio":"21:00"},"sezioni":[{"titolo":"Ritrovi e trasporti","righe":[{"cosa":"Ritrovo P.le Roma","risposta":"-","note":""},{"cosa":"Partenza P.le Roma","risposta":"Bus 5 ai min. 10/25/40/55","note":"fermata Sabadino Laguna - 9 minuti"}]},{"titolo":"Formalità","righe":[{"cosa":"Cartellini","risposta":"Fabio","note":""},{"cosa":"Distinte","risposta":"Fabio","note":""},{"cosa":"Borsa medica","risposta":"Alberto","note":""},{"cosa":"DAE (solo in casa)","risposta":"oggi siamo fuori casa","note":""}]},{"titolo":"Logistica","righe":[{"cosa":"Numero posti auto","risposta":"non serve","note":""},{"cosa":"Numero persone da VE","risposta":"non serve","note":""},{"cosa":"Linea bus","risposta":"Bus 5 ai min. 10/25/40/55","note":"fermata Sabadino Laguna - 9 minuti"},{"cosa":"Passaggi per il ritorno","risposta":"-","note":""}]},{"titolo":"Altro","righe":[{"cosa":"Palloni","risposta":"avversari","note":""},{"cosa":"Tè per ospiti","risposta":"oggi siamo fuori casa","note":""},{"cosa":"Terzo tempo","risposta":"organizzato cresh con Salsedine","note":""},{"cosa":"Giubbotti","risposta":"non credo ancora ci sia bisogno","note":""},{"cosa":"Striscioni","risposta":"","note":""}]},{"titolo":"Soldi","righe":[{"cosa":"Quota campo","risposta":"oggi siamo fuori casa","note":""}]}],"macchine":[],"aggiornato":""}</script>
+<script id="main">
+(function(){
+  var saved = JSON.parse(document.getElementById('state').textContent);
+  var state = JSON.parse(JSON.stringify(saved));
+  var mode = 'view', art = null, canWrite = false, msg = '', msgErr = false, confirmReset = false, showText = false;
+  var app = document.getElementById('app');
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function vuoto(v){var t=String(v==null?'':v).trim();return !t||/^[-–—]$/.test(t);}
+  function data(iso){if(!iso)return '';var d=new Date(iso+'T12:00:00');if(isNaN(d))return iso;return d.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long'});}
+  function quando(iso){if(!iso)return '';var d=new Date(iso);if(isNaN(d))return '';return d.toLocaleDateString('it-IT',{day:'numeric',month:'long'})+' alle '+d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});}
+
+  function testoWhatsApp(s){
+    var p=s.partita, L=[];
+    L.push('⚽ *'+(p.titolo||'Partita')+'*'+(p.giornata?' ('+p.giornata+')':''));
+    if(p.data) L.push('📅 '+data(p.data).replace(/^./,function(c){return c.toUpperCase();}));
+    if(p.campo) L.push('⏰ Al campo alle *'+p.campo+'*');
+    if(p.inizio) L.push('🏁 Calcio d\'inizio *'+p.inizio+'*');
+    if(p.dove) L.push('📍 '+p.dove+(p.casa==='fuori'?' (fuori casa)':p.casa==='casa'?' (in casa)':''));
+    if(p.maglia) L.push('👕 '+p.maglia);
+    s.sezioni.forEach(function(sez){
+      var r=sez.righe.filter(function(x){return !vuoto(x.risposta);});
+      if(!r.length) return;
+      L.push(''); L.push('*'+sez.titolo.toUpperCase()+'*');
+      r.forEach(function(x){L.push('• '+x.cosa+': '+x.risposta+(vuoto(x.note)?'':' ('+x.note.trim()+')'));});
+    });
+    if(s.macchine.length){
+      L.push(''); L.push('*MACCHINE DISPONIBILI*');
+      s.macchine.forEach(function(m){L.push('• '+(m.chi||'?')+(m.posti?' – '+m.posti+' posti':'')+(m.ora?', P.le Roma '+m.ora:'')+(m.ritorno?', ritorno: '+m.ritorno:''));});
+    }
+    L.push(''); L.push('Forza SRV! ★');
+    return L.join('\n');
+  }
+
+  function vista(){
+    var p=state.partita, h='';
+    h+='<header class="brand"><div class="badge" aria-hidden="true">SRV</div><div class="stripes" aria-hidden="true"><i></i><i></i></div>'+
+       '<div class="brand-name"><b>Stella Rossa</b><span>Calcio · Stagione 26/27</span></div></header>';
+    h+='<section class="match"><div class="match-top"><div class="chips">'+
+       (p.giornata?'<span class="chip">'+esc(p.giornata)+'</span>':'')+
+       (p.casa==='fuori'?'<span class="chip away">Fuori casa</span>':p.casa==='casa'?'<span class="chip">In casa</span>':'')+
+       '</div><h1>'+esc(p.titolo||'Prossima partita')+'</h1>'+
+       (p.data?'<div class="when">'+esc(data(p.data))+'</div>':'')+'</div>';
+    h+='<div class="times"><div class="time key"><small>Al campo</small><strong>'+esc(p.campo||'--:--')+'</strong></div>'+
+       '<div class="time"><small>Calcio d\'inizio</small><strong>'+esc(p.inizio||'--:--')+'</strong></div></div>';
+    h+='<div class="facts">';
+    if(p.dove) h+='<div class="fact"><span class="lbl">Dove</span><span class="val">'+esc(p.dove)+' <a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.dove+' Venezia')+'" target="_blank" rel="noopener">Mappa ↗</a></span></div>';
+    if(p.maglia) h+='<div class="fact"><span class="lbl">Maglia</span><span class="val">'+esc(p.maglia)+'</span></div>';
+    h+='</div></section>';
+
+    state.sezioni.forEach(function(sez){
+      h+='<section class="block"><h2>'+esc(sez.titolo)+'</h2><div class="rows">';
+      sez.righe.forEach(function(r){
+        var tbd=vuoto(r.risposta);
+        h+='<div class="row"><span class="k">'+esc(r.cosa)+'</span><span class="v'+(tbd?' tbd':'')+'">'+(tbd?'—':esc(r.risposta))+'</span>'+
+           (vuoto(r.note)?'':'<span class="n">'+esc(r.note)+'</span>')+'</div>';
+      });
+      h+='</div></section>';
+    });
+
+    h+='<section class="block"><h2>Macchine disponibili</h2>';
+    if(state.macchine.length){
+      h+='<div class="cars">';
+      state.macchine.forEach(function(m){
+        h+='<div class="car"><b>'+esc(m.chi||'—')+'</b><span class="seats">'+esc(m.posti||'?')+' posti</span>'+
+           '<span class="sub">'+(m.ora?'A P.le Roma alle '+esc(m.ora):'Orario da definire')+(m.ritorno?' · Ritorno: '+esc(m.ritorno):'')+'</span></div>';
+      });
+      h+='</div>';
+    } else h+='<div class="none">Nessuna macchina segnalata.</div>';
+    h+='</section>';
+
+    var t=testoWhatsApp(state);
+    h+='<div class="actions"><button class="btn green" id="copia" type="button">Copia testo per WhatsApp</button>'+
+       '<a class="btn ghost" href="https://wa.me/?text='+encodeURIComponent(t)+'" target="_blank" rel="noopener">Apri in WhatsApp ↗</a>'+
+       (canWrite?'<button class="btn ghost" id="modifica" type="button">Modifica</button>':'')+'</div>';
+    h+='<div class="status'+(msgErr?' err':'')+'" role="status">'+esc(msg)+'</div>';
+    if(showText) h+='<textarea class="copybox" id="testo" readonly>'+esc(t)+'</textarea>';
+    h+='<footer>Polisportiva Stella Rossa Venezia'+(state.aggiornato?' · aggiornato il '+esc(quando(state.aggiornato)):'')+'</footer>';
+    return h;
+  }
+
+  function f(label,path,val,type,extra){
+    var id='f_'+path.replace(/\./g,'_');
+    return '<div class="field"><label for="'+id+'">'+label+'</label><input id="'+id+'" data-path="'+path+'" type="'+(type||'text')+'" value="'+esc(val)+'"'+(extra||'')+'></div>';
+  }
+
+  function editor(){
+    var p=state.partita, h='<div class="editor">';
+    h+='<header class="brand"><div class="badge" aria-hidden="true">SRV</div><div class="stripes" aria-hidden="true"><i></i><i></i></div>'+
+       '<div class="brand-name"><b>Modifica</b><span>Le modifiche si vedono dopo il salvataggio</span></div></header>';
+    h+='<div class="ed-block"><h3>Partita</h3><div class="grid2">'+
+       f('Partita','p.titolo',p.titolo)+f('Giornata','p.giornata',p.giornata)+
+       f('Data','p.data',p.data,'date')+
+       '<div class="field"><label for="f_casa">Casa / fuori</label><select id="f_casa" data-path="p.casa">'+
+         ['casa','fuori'].map(function(o){return '<option value="'+o+'"'+(p.casa===o?' selected':'')+'>'+(o==='casa'?'In casa':'Fuori casa')+'</option>';}).join('')+'</select></div>'+
+       f('Al campo alle','p.campo',p.campo,'time')+f('Calcio d\'inizio','p.inizio',p.inizio,'time')+
+       f('Dove','p.dove',p.dove)+f('Colore maglia','p.maglia',p.maglia)+'</div></div>';
+    state.sezioni.forEach(function(sez,i){
+      h+='<div class="ed-block"><h3>'+esc(sez.titolo)+'</h3>';
+      sez.righe.forEach(function(r,j){
+        h+='<div class="ed-row">'+f('Cosa','s.'+i+'.'+j+'.cosa',r.cosa)+f('Risposta','s.'+i+'.'+j+'.risposta',r.risposta)+f('Note','s.'+i+'.'+j+'.note',r.note)+'</div>';
+      });
+      h+='</div>';
+    });
+    h+='<div class="ed-block"><h3>Macchine disponibili</h3>';
+    state.macchine.forEach(function(m,k){
+      h+='<div class="ed-car">'+f('Chi','m.'+k+'.chi',m.chi)+f('Posti','m.'+k+'.posti',m.posti,'number',' min="1" max="9" inputmode="numeric"')+
+         f('Ora P.le Roma','m.'+k+'.ora',m.ora,'time')+f('Ritorno?','m.'+k+'.ritorno',m.ritorno)+
+         '<button class="x" type="button" data-del="'+k+'" aria-label="Togli la macchina di '+esc(m.chi||'questa riga')+'">×</button></div>';
+    });
+    h+='<div><button class="btn ghost small" id="addcar" type="button">+ Aggiungi macchina</button></div></div>';
+    h+='<div class="ed-block"><h3>Nuova partita</h3><p style="margin:0;color:var(--muted);font-size:14px">Svuota risposte, note, orari e macchine; tiene le voci e il colore della maglia.</p><div>'+
+       (confirmReset?'<button class="btn small" id="resetok" type="button">Sì, svuota</button> <button class="btn ghost small" id="resetno" type="button">Annulla</button>'
+                    :'<button class="btn ghost small" id="reset" type="button">Prepara nuova partita</button>')+'</div></div>';
+    h+='<div class="sticky"><button class="btn" id="salva" type="button">Salva e pubblica</button><button class="btn ghost" id="annulla" type="button">Annulla</button>'+
+       '<span class="status'+(msgErr?' err':'')+'" role="status">'+esc(msg)+'</span></div></div>';
+    return h;
+  }
+
+  function render(){app.innerHTML = '<div class="wrap">'+(mode==='edit'?editor():vista())+'</div>';}
+
+  function setPath(path,v){
+    var a=path.split('.');
+    if(a[0]==='p') state.partita[a[1]]=v;
+    else if(a[0]==='s') state.sezioni[+a[1]].righe[+a[2]][a[3]]=v;
+    else if(a[0]==='m') state.macchine[+a[1]][a[2]]=v;
+  }
+
+  function documento(s){
+    var json=JSON.stringify(s).replace(/</g,'\\u003c');
+    var main=document.getElementById('main').textContent;
+    var css=document.getElementById('css').textContent;
+    return '<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>'+
+      ':root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}'+
+      '</style></head><body>'+
+      '<title>SRV Prossima Partita</title>\n<meta name="claude:viewport-fit-sides" content="cover">\n'+
+      '<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Monoton&family=Rubik:wght@400;500;700;900&display=swap">\n'+
+      '<style id="css">'+css+'</style>\n<div id="app"></div>\n'+
+      '<script type="application/json" id="state">'+json+'<\/script>\n<script id="main">'+main+'<\/script>'+
+      '</body></html>';
+  }
+
+  function salva(){
+    var s=JSON.parse(JSON.stringify(state)); s.aggiornato=new Date().toISOString();
+    if(!art){
+      try{
+        var blob=new Blob([documento(s)],{type:'text/html'});
+        var a=document.createElement('a');
+        a.href=URL.createObjectURL(blob);
+        a.download='SRV-partita-'+(s.partita.data||'nuova')+'.html';
+        document.body.appendChild(a);a.click();a.remove();
+        setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+        saved=JSON.parse(JSON.stringify(s));state=JSON.parse(JSON.stringify(s));mode='view';
+        msg='File aggiornato scaricato: è quello da condividere.';msgErr=false;
+      }catch(_){msg='Download non riuscito in questo browser.';msgErr=true;}
+      render();return;
+    }
+    msg='Pubblico…';msgErr=false;render();
+    art.publish(documento(s)).then(function(){msg='Pubblicato.';}).catch(function(e){
+      var c=e&&e.code;
+      msgErr=true;
+      if(c==='conflict') {msg='Qualcun altro ha salvato prima: la pagina si ricarica con la sua versione.';msgErr=false;}
+      else if(c==='not_writer'||c==='not_granted'||c==='consent_required'||c==='not_declared'||c==='capability_disabled'){canWrite=false;mode='view';state=JSON.parse(JSON.stringify(saved));msg='Solo chi gestisce la pagina può modificarla.';}
+      else if(c==='rate_limited') msg='Troppi salvataggi ravvicinati: riprova tra un minuto.';
+      else msg='Salvataggio non riuscito. Riprova tra poco.';
+      render();
+    });
+  }
+
+  app.addEventListener('input',function(e){var p=e.target.getAttribute('data-path');if(p) setPath(p,e.target.value);});
+  app.addEventListener('change',function(e){var p=e.target.getAttribute('data-path');if(p) setPath(p,e.target.value);});
+  app.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    var id=b.id;
+    if(id==='copia'){
+      var t=testoWhatsApp(state);
+      var ok=function(){msg='Testo copiato: incollalo nel gruppo.';msgErr=false;showText=false;render();};
+      var ko=function(){showText=true;msg='Copia automatica non riuscita: seleziona il testo qui sotto.';msgErr=false;render();var ta=document.getElementById('testo');if(ta){ta.focus();ta.select();}};
+      try{navigator.clipboard.writeText(t).then(ok,ko);}catch(_){ko();}
+    }
+    else if(id==='modifica'){mode='edit';msg='';confirmReset=false;render();window.scrollTo(0,0);}
+    else if(id==='annulla'){state=JSON.parse(JSON.stringify(saved));mode='view';msg='';render();}
+    else if(id==='salva') salva();
+    else if(id==='addcar'){state.macchine.push({chi:'',posti:'',ora:'',ritorno:''});render();}
+    else if(b.hasAttribute('data-del')){state.macchine.splice(+b.getAttribute('data-del'),1);render();}
+    else if(id==='reset'){confirmReset=true;render();}
+    else if(id==='resetno'){confirmReset=false;render();}
+    else if(id==='resetok'){
+      var p=state.partita;
+      state.partita={titolo:'',giornata:'',data:'',dove:'',maglia:p.maglia,casa:p.casa,campo:'',inizio:''};
+      state.sezioni.forEach(function(s){s.righe.forEach(function(r){r.risposta='';r.note='';});});
+      state.macchine=[]; confirmReset=false; msg='Scheda svuotata: compila e salva.'; msgErr=false; render();
+    }
+  });
+
+  render();
+
+  if(!(window.claude && typeof window.claude.use==='function')){canWrite=(location.protocol==='file:');render();}
+  else {
+    window.claude.use('artifact').then(function(a){
+      if(!a) return;
+      art=a;
+      return window.claude.use('user').then(function(u){
+        if(!u){canWrite=true;return;}
+        return u.canEdit().then(function(ok){canWrite=!!ok;});
+      }).catch(function(){canWrite=true;});
+    }).then(function(){if(mode==='view') render();}).catch(function(){});
+  }
+})();
+</script>
+
+</body></html>
