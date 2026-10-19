@@ -22,10 +22,8 @@ button,input,select{font:inherit}
 
 /* testata con le strisce del sito */
 .brand{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:12px;position:relative}
-.badge{width:58px;height:58px;border-radius:50%;background:var(--gold);border:3px solid var(--slate);display:grid;place-items:center;
-  font-weight:900;color:var(--slate);letter-spacing:-.04em;font-size:19px;position:relative;z-index:1}
-.badge::before{content:"★";position:absolute;top:-17px;color:var(--maroon);font-size:14px}
-.stripes{display:flex;flex-direction:column;gap:7px;margin-left:-26px}
+.logo{display:block;width:60px;height:auto;position:relative;z-index:1}
+.stripes{display:flex;flex-direction:column;gap:7px;margin-left:-34px;padding-top:18px}
 .stripes i{display:block;height:13px;border-radius:7px;background:var(--green)}
 .stripes i+i{background:var(--maroon)}
 .brand-name{grid-column:1/-1;display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
@@ -111,13 +109,14 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
 @media (prefers-reduced-motion:no-preference){.btn{transition:background .15s}}
 </style>
 <div id="app"></div>
-<script type="application/json" id="state">{"partita":{"titolo":"Salsedine – SRV","giornata":"G2","data":"2026-10-19","dove":"CEP Campalto Villaggio Laguna","maglia":"Nera con calze verdi","casa":"fuori","campo":"20:00","inizio":"21:00"},"sezioni":[{"titolo":"Ritrovi e trasporti","righe":[{"cosa":"Ritrovo P.le Roma","risposta":"-","note":""},{"cosa":"Partenza P.le Roma","risposta":"Bus 5 ai min. 10/25/40/55","note":"fermata Sabadino Laguna - 9 minuti"}]},{"titolo":"Formalità","righe":[{"cosa":"Cartellini","risposta":"Fabio","note":""},{"cosa":"Distinte","risposta":"Fabio","note":""},{"cosa":"Borsa medica","risposta":"Alberto","note":""},{"cosa":"DAE (solo in casa)","risposta":"oggi siamo fuori casa","note":""}]},{"titolo":"Logistica","righe":[{"cosa":"Numero posti auto","risposta":"non serve","note":""},{"cosa":"Numero persone da VE","risposta":"non serve","note":""},{"cosa":"Linea bus","risposta":"Bus 5 ai min. 10/25/40/55","note":"fermata Sabadino Laguna - 9 minuti"},{"cosa":"Passaggi per il ritorno","risposta":"-","note":""}]},{"titolo":"Altro","righe":[{"cosa":"Palloni","risposta":"avversari","note":""},{"cosa":"Tè per ospiti","risposta":"oggi siamo fuori casa","note":""},{"cosa":"Terzo tempo","risposta":"organizzato cresh con Salsedine","note":""},{"cosa":"Giubbotti","risposta":"non credo ancora ci sia bisogno","note":""},{"cosa":"Striscioni","risposta":"","note":""}]},{"titolo":"Soldi","righe":[{"cosa":"Quota campo","risposta":"oggi siamo fuori casa","note":""}]}],"macchine":[],"aggiornato":""}</script>
+<script type="application/json" id="state">{"partita":{"titolo":"Salsedine – SRV","giornata":"G2","data":"2026-10-19","dove":"CEP Campalto Villaggio Laguna","maglia":"Nera con calze verdi","casa":"fuori","campo":"20:00","inizio":"21:00"},"sezioni":[{"titolo":"Ritrovi e trasporti","righe":[{"cosa":"Ritrovo P.le Roma","risposta":"-","note":""},{"cosa":"Partenza P.le Roma","risposta":"Bus 5 ai min. 10/25/40/55","note":"fermata Sabadino Laguna - 9 minuti"}]},{"titolo":"Formalità","righe":[{"cosa":"Cartellini","risposta":"Fabio","note":""},{"cosa":"Distinte","risposta":"Fabio","note":""},{"cosa":"Borsa medica","risposta":"Alberto","note":""},{"cosa":"DAE (solo in casa)","risposta":"oggi siamo fuori casa","note":""}]},{"titolo":"Logistica","righe":[{"cosa":"Numero posti auto","risposta":"non serve","note":""},{"cosa":"Numero persone da VE","risposta":"non serve","note":""},{"cosa":"Linea bus","risposta":"Bus 5 ai min. 10/25/40/55","note":"fermata Sabadino Laguna - 9 minuti"},{"cosa":"Passaggi per il ritorno","risposta":"-","note":""}]},{"titolo":"Altro","righe":[{"cosa":"Palloni","risposta":"avversari","note":""},{"cosa":"Tè per ospiti","risposta":"oggi siamo fuori casa","note":""},{"cosa":"Terzo tempo","risposta":"organizzato Cresh con Salsedine","note":""},{"cosa":"Giubbotti","risposta":"non credo ancora ci sia bisogno","note":""},{"cosa":"Striscioni","risposta":"","note":""}]},{"titolo":"Soldi","righe":[{"cosa":"Quota campo","risposta":"oggi siamo fuori casa","note":""}]}],"macchine":[],"aggiornato":""}</script>
 <script id="main">
 (function(){
   var saved = JSON.parse(document.getElementById('state').textContent);
   var state = JSON.parse(JSON.stringify(saved));
   var mode = 'view', art = null, canWrite = false, msg = '', msgErr = false, confirmReset = false, showText = false;
   var app = document.getElementById('app');
+  var LOGO = 'data:image/avif;base64,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';
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
   function vuoto(v){var t=String(v==null?'':v).trim();return !t||/^[-–—]$/.test(t);}
@@ -148,7 +147,7 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
 
   function vista(){
     var p=state.partita, h='';
-    h+='<header class="brand"><div class="badge" aria-hidden="true">SRV</div><div class="stripes" aria-hidden="true"><i></i><i></i></div>'+
+    h+='<header class="brand"><img class="logo" src="'+LOGO+'" alt="Logo SRV"><div class="stripes" aria-hidden="true"><i></i><i></i></div>'+
        '<div class="brand-name"><b>Stella Rossa</b><span>Calcio · Stagione 26/27</span></div></header>';
     h+='<section class="match"><div class="match-top"><div class="chips">'+
        (p.giornata?'<span class="chip">'+esc(p.giornata)+'</span>':'')+
@@ -183,12 +182,8 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
     } else h+='<div class="none">Nessuna macchina segnalata.</div>';
     h+='</section>';
 
-    var t=testoWhatsApp(state);
-    h+='<div class="actions"><button class="btn green" id="copia" type="button">Copia testo per WhatsApp</button>'+
-       '<a class="btn ghost" href="https://wa.me/?text='+encodeURIComponent(t)+'" target="_blank" rel="noopener">Apri in WhatsApp ↗</a>'+
-       (canWrite?'<button class="btn ghost" id="modifica" type="button">Modifica</button>':'')+'</div>';
-    h+='<div class="status'+(msgErr?' err':'')+'" role="status">'+esc(msg)+'</div>';
-    if(showText) h+='<textarea class="copybox" id="testo" readonly>'+esc(t)+'</textarea>';
+    if(canWrite) h+='<div class="actions"><button class="btn ghost" id="modifica" type="button">Modifica</button></div>';
+    if(msg) h+='<div class="status'+(msgErr?' err':'')+'" role="status">'+esc(msg)+'</div>';
     h+='<footer>Polisportiva Stella Rossa Venezia'+(state.aggiornato?' · aggiornato il '+esc(quando(state.aggiornato)):'')+'</footer>';
     return h;
   }
@@ -200,7 +195,7 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
 
   function editor(){
     var p=state.partita, h='<div class="editor">';
-    h+='<header class="brand"><div class="badge" aria-hidden="true">SRV</div><div class="stripes" aria-hidden="true"><i></i><i></i></div>'+
+    h+='<header class="brand"><img class="logo" src="'+LOGO+'" alt="Logo SRV"><div class="stripes" aria-hidden="true"><i></i><i></i></div>'+
        '<div class="brand-name"><b>Modifica</b><span>Le modifiche si vedono dopo il salvataggio</span></div></header>';
     h+='<div class="ed-block"><h3>Partita</h3><div class="grid2">'+
        f('Partita','p.titolo',p.titolo)+f('Giornata','p.giornata',p.giornata)+
