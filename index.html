@@ -59,6 +59,7 @@ button,input,select{font:inherit}
 .row:first-child{border-top:0}
 .row .k{color:var(--muted);font-size:14px}
 .row .v{font-weight:700;overflow-wrap:anywhere}
+.row .v.alert{color:#d11a2a;font-weight:900}
 .row .v.tbd{font-weight:400;font-style:italic;color:var(--muted)}
 .row .n{grid-column:2;font-size:13.5px;color:var(--muted);overflow-wrap:anywhere}
 .cars{padding:6px 16px 12px}
@@ -109,7 +110,7 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
 @media (prefers-reduced-motion:no-preference){.btn{transition:background .15s}}
 </style>
 <div id="app"></div>
-<script type="application/json" id="state">{"partita":{"titolo":"Salsedine – SRV","giornata":"G2","data":"2026-10-19","dove":"CEP Campalto Villaggio Laguna","maglia":"Nera con calze verdi","casa":"fuori","campo":"20:00","inizio":"21:00"},"sezioni":[{"titolo":"Ritrovi e trasporti","righe":[{"cosa":"Ritrovo P.le Roma","risposta":"-","note":""},{"cosa":"Partenza P.le Roma","risposta":"Bus 5 ai min. 10/25/40/55","note":"fermata Sabadino Laguna - 9 minuti"}]},{"titolo":"Formalità","righe":[{"cosa":"Cartellini","risposta":"Fabio","note":""},{"cosa":"Distinte","risposta":"Fabio","note":""},{"cosa":"Borsa medica","risposta":"Alberto","note":""},{"cosa":"DAE (solo in casa)","risposta":"oggi siamo fuori casa","note":""}]},{"titolo":"Logistica","righe":[{"cosa":"Numero posti auto","risposta":"non serve","note":""},{"cosa":"Numero persone da VE","risposta":"non serve","note":""},{"cosa":"Linea bus","risposta":"Bus 5 ai min. 10/25/40/55","note":"fermata Sabadino Laguna - 9 minuti"},{"cosa":"Passaggi per il ritorno","risposta":"-","note":""}]},{"titolo":"Altro","righe":[{"cosa":"Palloni","risposta":"avversari","note":""},{"cosa":"Tè per ospiti","risposta":"oggi siamo fuori casa","note":""},{"cosa":"Terzo tempo","risposta":"organizzato Cresh con Salsedine","note":""},{"cosa":"Giubbotti","risposta":"non credo ancora ci sia bisogno","note":""},{"cosa":"Striscioni","risposta":"","note":""}]},{"titolo":"Soldi","righe":[{"cosa":"Quota campo","risposta":"oggi siamo fuori casa","note":""}]}],"macchine":[],"aggiornato":""}</script>
+<script type="application/json" id="state">{"partita": {"titolo": "SRV – Santa Bertilla", "giornata": "G2", "data": "2026-10-21", "dove": "CEP", "maglia": "Bianca con calze verdi", "casa": "casa", "campo": "20:00", "inizio": "21:00"}, "sezioni": [{"titolo": "Ritrovi e trasporti", "righe": [{"cosa": "Ritrovo P.le Roma", "risposta": "-", "note": ""}, {"cosa": "Partenza P.le Roma", "risposta": "Bus 5 ai min. 10/25/40/55", "note": "fermata Sabadino Laguna - 9 minuti"}]}, {"titolo": "Formalità", "righe": [{"cosa": "Cartellini", "risposta": "in borsa medica", "note": ""}, {"cosa": "Distinte", "risposta": "controlla Flavio, stampa Alberto", "note": ""}, {"cosa": "Borsa medica", "risposta": "Alberto", "note": ""}, {"cosa": "DAE (solo in casa)", "risposta": "Gazza", "note": ""}]}, {"titolo": "Logistica", "righe": [{"cosa": "Numero posti auto", "risposta": "non serve", "note": ""}, {"cosa": "Numero persone da VE", "risposta": "non serve", "note": ""}, {"cosa": "Linea bus", "risposta": "Bus 5 ai min. 10/25/40/55", "note": "fermata Sabadino Laguna - 9 minuti"}, {"cosa": "Passaggi per il ritorno", "risposta": "-", "note": ""}]}, {"titolo": "Altro", "righe": [{"cosa": "Palloni", "risposta": "Cresh", "note": ""}, {"cosa": "Tè per ospiti", "risposta": "DA ORGANIZZARE", "note": "", "evidenza": true}, {"cosa": "Terzo tempo", "risposta": "al bar del CEP", "note": ""}, {"cosa": "Giubbotti", "risposta": "non credo ancora ci sia bisogno", "note": ""}, {"cosa": "Striscioni", "risposta": "boh", "note": ""}]}, {"titolo": "Soldi", "righe": [{"cosa": "Quota campo", "risposta": "Zalan", "note": ""}]}], "macchine": [], "aggiornato": "2026-10-21T12:00:00.000Z"}</script>
 <script id="main">
 (function(){
   var saved = JSON.parse(document.getElementById('state').textContent);
@@ -165,7 +166,7 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
       h+='<section class="block"><h2>'+esc(sez.titolo)+'</h2><div class="rows">';
       sez.righe.forEach(function(r){
         var tbd=vuoto(r.risposta);
-        h+='<div class="row"><span class="k">'+esc(r.cosa)+'</span><span class="v'+(tbd?' tbd':'')+'">'+(tbd?'—':esc(r.risposta))+'</span>'+
+        h+='<div class="row"><span class="k">'+esc(r.cosa)+'</span><span class="v'+(tbd?' tbd':'')+(r.evidenza&&!tbd?' alert':'')+'">'+(tbd?'—':esc(r.risposta))+'</span>'+
            (vuoto(r.note)?'':'<span class="n">'+esc(r.note)+'</span>')+'</div>';
       });
       h+='</div></section>';
@@ -182,9 +183,7 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
     } else h+='<div class="none">Nessuna macchina segnalata.</div>';
     h+='</section>';
 
-    h+='<div class="actions"><button class="btn green" id="copia" type="button">Copia testo per WhatsApp</button>'+(canWrite?'<button class="btn ghost" id="modifica" type="button">Modifica</button>':'')+'</div>';
     if(msg) h+='<div class="status'+(msgErr?' err':'')+'" role="status">'+esc(msg)+'</div>';
-    if(showText) h+='<textarea class="copybox" id="testo" readonly>'+esc(testoWhatsApp(state))+'</textarea>';
     h+='<footer>Polisportiva Stella Rossa Venezia'+(state.aggiornato?' · aggiornato il '+esc(quando(state.aggiornato)):'')+'</footer>';
     return h;
   }
@@ -227,7 +226,33 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
     return h;
   }
 
-  function render(){app.innerHTML = '<div class="wrap">'+(mode==='edit'?editor():vista())+'</div>';}
+  function accesso(){
+    return '<div class="editor"><header class="brand"><img class="logo" src="'+LOGO+'" alt="Logo SRV"><div class="stripes" aria-hidden="true"><i></i><i></i></div>'+
+      '<div class="brand-name"><b>Accesso</b><span>Area riservata</span></div></header>'+
+      '<form class="ed-block" id="login"><h3>Pannello di gestione</h3>'+
+      '<div class="field"><label for="pwd">Password</label><input id="pwd" type="password" autocomplete="current-password" required></div>'+
+      '<div class="actions"><button class="btn" type="submit">Entra</button><button class="btn ghost" id="annulla" type="button">Annulla</button></div>'+
+      '<span class="status'+(msgErr?' err':'')+'" role="status">'+esc(msg)+'</span></form></div>';
+  }
+  var HASH='2149caac5ea280bc1f3b68a2275c55ecc7d67e3d5178af50ec464fdbab2b6235';
+  function hex(buf){return Array.prototype.map.call(new Uint8Array(buf),function(b){return ('0'+b.toString(16)).slice(-2);}).join('');}
+  function verifica(pw){
+    if(!(window.crypto&&crypto.subtle)) return Promise.reject(new Error('nocrypto'));
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(pw)).then(function(b){return hex(b)===HASH;});
+  }
+  function render(){
+    app.innerHTML = '<div class="wrap">'+(mode==='edit'?editor():mode==='login'?accesso():vista())+'</div>';
+    if(mode==='login'){var i=document.getElementById('pwd');if(i)i.focus();}
+  }
+  app.addEventListener('submit',function(e){
+    if(e.target.id!=='login') return;
+    e.preventDefault();
+    var pw=document.getElementById('pwd').value;
+    verifica(pw).then(function(ok){
+      if(ok){mode='edit';msg='';msgErr=false;confirmReset=false;render();window.scrollTo(0,0);}
+      else{msg='Password errata.';msgErr=true;render();}
+    }).catch(function(){msg='Questo browser non riesce a verificare la password: apri la pagina in https.';msgErr=true;render();});
+  });
 
   function setPath(path,v){
     var a=path.split('.');
@@ -288,7 +313,7 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
       var ko=function(){showText=true;msg='Copia automatica non riuscita: seleziona il testo qui sotto.';msgErr=false;render();var ta=document.getElementById('testo');if(ta){ta.focus();ta.select();}};
       try{navigator.clipboard.writeText(t).then(ok,ko);}catch(_){ko();}
     }
-    else if(id==='modifica'){mode='edit';msg='';confirmReset=false;render();window.scrollTo(0,0);}
+    else if(id==='modifica'){mode='login';msg='';msgErr=false;render();window.scrollTo(0,0);}
     else if(id==='annulla'){state=JSON.parse(JSON.stringify(saved));mode='view';msg='';render();}
     else if(id==='salva') salva();
     else if(id==='addcar'){state.macchine.push({chi:'',posti:'',ora:'',ritorno:''});render();}
@@ -305,7 +330,7 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
 
   render();
 
-  if(!(window.claude && typeof window.claude.use==='function')){canWrite=(location.protocol==='file:'||/modifica/.test(location.hash+location.search));render();}
+  if(!(window.claude && typeof window.claude.use==='function')){render();}
   else {
     window.claude.use('artifact').then(function(a){
       if(!a) return;
