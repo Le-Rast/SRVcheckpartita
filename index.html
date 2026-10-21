@@ -182,8 +182,9 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
     } else h+='<div class="none">Nessuna macchina segnalata.</div>';
     h+='</section>';
 
-    if(canWrite) h+='<div class="actions"><button class="btn ghost" id="modifica" type="button">Modifica</button></div>';
+    h+='<div class="actions"><button class="btn green" id="copia" type="button">Copia testo per WhatsApp</button>'+(canWrite?'<button class="btn ghost" id="modifica" type="button">Modifica</button>':'')+'</div>';
     if(msg) h+='<div class="status'+(msgErr?' err':'')+'" role="status">'+esc(msg)+'</div>';
+    if(showText) h+='<textarea class="copybox" id="testo" readonly>'+esc(testoWhatsApp(state))+'</textarea>';
     h+='<footer>Polisportiva Stella Rossa Venezia'+(state.aggiornato?' · aggiornato il '+esc(quando(state.aggiornato)):'')+'</footer>';
     return h;
   }
@@ -256,11 +257,11 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
         var blob=new Blob([documento(s)],{type:'text/html'});
         var a=document.createElement('a');
         a.href=URL.createObjectURL(blob);
-        a.download='SRV-partita-'+(s.partita.data||'nuova')+'.html';
+        a.download='index.html';
         document.body.appendChild(a);a.click();a.remove();
         setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
         saved=JSON.parse(JSON.stringify(s));state=JSON.parse(JSON.stringify(s));mode='view';
-        msg='File aggiornato scaricato: è quello da condividere.';msgErr=false;
+        msg='Scaricato index.html aggiornato: caricalo su GitHub al posto del vecchio.';msgErr=false;
       }catch(_){msg='Download non riuscito in questo browser.';msgErr=true;}
       render();return;
     }
@@ -304,7 +305,7 @@ footer{font-size:12.5px;color:var(--muted);text-align:center}
 
   render();
 
-  if(!(window.claude && typeof window.claude.use==='function')){canWrite=(location.protocol==='file:');render();}
+  if(!(window.claude && typeof window.claude.use==='function')){canWrite=(location.protocol==='file:'||/modifica/.test(location.hash+location.search));render();}
   else {
     window.claude.use('artifact').then(function(a){
       if(!a) return;
